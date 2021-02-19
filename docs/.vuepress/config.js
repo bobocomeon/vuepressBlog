@@ -21,8 +21,8 @@ module.exports = {
     lastUpdated: '上次更新',
     nav: [ // 导航栏配置
       {text: '前端基础', link: '/accumulate/prepare/'},
-      {text: '算法题库', link: '/algorithm/'},
-      {text: '网络', link: '/network/'},
+      {text: '算法题库', link: '/algorithm/guide/'},
+      {text: '网络', link: '/network/guide/'},
       {text: '其他', link: '/others/'},
     ],
     sidebar: {
@@ -34,7 +34,8 @@ module.exports = {
             ['prepare/', 'Introduction'],
             'prepare/flow',
             'prepare/directory',
-            'prepare/build'
+            'prepare/build',
+            'prepare/学习js数据结构与算法 & 算法图解'
           ]
         },
         {
@@ -44,6 +45,17 @@ module.exports = {
             ['compile/', 'Introduction'],
             'compile/parse',
             'compile/entrance'
+          ]
+        }
+      ],
+      '/network/': [
+        {
+          title: '网络篇',
+          collapsable: false,
+          children: [
+            ['guide/', 'Introduction'],
+            'guide/performance',
+            'guide/flow'
           ]
         }
       ]
