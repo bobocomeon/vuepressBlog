@@ -35,7 +35,8 @@ module.exports = {
             'prepare/flow',
             'prepare/directory',
             'prepare/build',
-            'prepare/学习js数据结构与算法 & 算法图解'
+            'prepare/init',
+            'prepare/jsleetcode'
           ]
         },
         {
