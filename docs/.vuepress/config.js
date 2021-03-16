@@ -44,6 +44,7 @@ module.exports = {
           collapsable: false,
           children: [
             ['compile/', 'Introduction'],
+            'compile/vdom',
             'compile/parse',
             'compile/entrance'
           ]
