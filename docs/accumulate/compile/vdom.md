@@ -28,3 +28,9 @@ new Vue ==> vm._init() ==> vm.$mount(el) ==> vm._render()  ==> vm.update(vnode)
 父beforeupdate => 父updated
 4. 销毁阶段
 父beforeDestroy->子beforeDestroy->子destroyed->父destroyed
+
+### 写 React / Vue 项目时为什么要在列表组件中写 key，其作用是什么？
+key是给每一个vnode的唯一key，依靠key更准确更快的拿到oldVnode中对应的vnode节点,而且在比对的时候能更快的找到对应节点进行对比，是复用还是增加，对用一个列表来说，没有改变的节点会原地复用
+
+### diff算法时候设置key和不设置key的区别
+不设置key，newCh和oldCh只会进行头尾两端的相互比较，设置key只会，除了头尾两端比较外，还会从用key生成的对象map中查找匹配节点，更高效的利用节点。

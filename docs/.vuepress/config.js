@@ -21,7 +21,7 @@ module.exports = {
     lastUpdated: '上次更新',
     nav: [ // 导航栏配置
       {text: '前端基础', link: '/accumulate/prepare/'},
-      {text: '算法题库', link: '/algorithm/guide/'},
+      {text: '算法题库', link: '/algorithm/'},
       {text: '网络', link: '/network/guide/'},
       {text: '其他', link: '/others/'},
     ],
@@ -32,11 +32,19 @@ module.exports = {
           collapsable: false,
           children: [
             ['prepare/', 'Introduction'],
-            'prepare/flow',
+            'prepare/jsbase',
+            'prepare/summary',
             'prepare/directory',
-            'prepare/build',
             'prepare/init',
             'prepare/jsleetcode'
+          ]
+        },
+        {
+          title: '安全',
+          collapsable: false,
+          children: [
+            ['safety/', 'Introduction'],
+            'safety/xsscsrf'
           ]
         },
         {
@@ -50,6 +58,15 @@ module.exports = {
           ]
         }
       ],
+      '/algorithm/': [
+        {
+          title: '算法篇',
+          collapsable: false,
+          children: [
+            'leetcode'
+          ]
+        }
+      ],
       '/network/': [
         {
           title: '网络篇',
@@ -57,7 +74,18 @@ module.exports = {
           children: [
             ['guide/', 'Introduction'],
             'guide/performance',
-            'guide/flow'
+            'guide/https',
+            'guide/tcp'
+          ]
+        }
+      ],
+      '/others/': [
+        {
+          title: '其他',
+          collapsable: false,
+          children: [
+            'css',
+            'safety'
           ]
         }
       ]
