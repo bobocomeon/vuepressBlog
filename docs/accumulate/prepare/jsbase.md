@@ -8,3 +8,56 @@
 
 ## BigInt
 在js中所有数字采用双精度64位浮点格式表示，最大值是Math.pow(2, 53) - 1,要创建bigInt只需在末尾增加n即可，但是BigInt不支持一元运算符，也不能和Number进行混合操作。 
+
+
+## ES6中的Set WeakSet Map WeakMap
+###  Set 
+### WeakSet
+
+### Map
+- 本质上是键值对的集合，hash结构，传统意义上对象只能用字符串当键，传入的值会被转化为字符串,而map各种类型的值包括对象都可以当做键。
+传统obj
+```js
+var data = {}
+var element = document.getElementById('myDiv')
+data[element] = 'meteData'
+data['[object HTMLDivElement]'] // 'meteData'
+```
+map应用
+```js
+var map = new Map([
+  ['name': '张三'],
+  ['title': 'Author']
+])
+map.size // 2
+map.get('name') // '张三'
+map.hash('title') // true
+
+var m = new Map([
+  [true, 'foo'],
+  ['true', 'bar']
+]);
+
+m.get(true) // 'foo'
+m.get('true') // 'bar'
+
+// 如果读取一个未知的键，则返回undefined。
+new Map().get('asfddfsasadf')
+// undefined
+```
+### WeakMap
+只接受对象作为键名，而且键名所指的对象不计入垃圾回收机制，weakMap设计的目的，键名是对象的弱引用（垃圾回收机制不将其考虑在内），所以其对应的对象可能会被自动回收，当对象回收后，WeakMap自动移除对应的键值对。
+比如我们常见的dom元素的WeakMap结构，当某个DOM元素被清楚后，其所对应的WeakMap记录就会被自动移除。只要其对象没有被引用，就会被回收，防止内存泄漏。
+
+可以用作创建私有属性
+```js
+let _counter = new WeakMap()
+let _action = new WeakMap()
+class Countdown {
+  constructor(counter, action) {
+    _counter.set(this, counter) // 实例的弱引用
+    _action.set(this, action)
+  }
+}
+let c = new Countdown(2, () => console.log('DONE'));
+```

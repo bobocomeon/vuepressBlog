@@ -120,5 +120,51 @@ callUpdatedHooks触发updated生命周期钩子函数
 至此！一个响应式从头到尾正式完成！
 
 
+## computed实现和缓存机制
+1、首先在render函数里面会读取this.info，这个会触发createComputedGetter(key)中的computedGetter(key)；
+2、然后会判断watcher.dirty，执行watcher.evaluate()；
+3、进到watcher.evaluate()，才真想执行this.get方法，这时候会执行pushTarget(this)把当前的computed watcher push到stack里面去，并且把Dep.target 设置成当前的computed watcher`；
+4、然后运行this.getter.call(vm, vm) 相当于运行computed的info: function() { return this.name + this.age }，这个方法；
+5、info函数里面会读取到this.name，这时候就会触发数据响应式Object.defineProperty.get的方法，这里name会进行依赖收集，把watcer收集到对应的dep上面；并且返回name = '张三'的值，age收集同理；
+6、依赖收集完毕之后执行popTarget()，把当前的computed watcher从栈清除，返回计算后的值('张三+10')，并且this.dirty = false；
+7、watcher.evaluate()执行完毕之后，就会判断Dep.target 是不是true，如果有就代表还有渲染watcher，就执行watcher.depend()，然后让watcher里面的deps都收集渲染watcher，这就是双向保存的优势。
+8、此时name都收集了computed watcher 和 渲染watcher。那么设置name的时候都会去更新执行watcher.update()
+9、如果是computed watcher的话不会重新执行一遍只会把this.dirty 设置成 true，如果数据变化的时候再执行watcher.evaluate()进行info更新，没有变化的的话this.dirty 就是false，不会执行info方法。这就是computed缓存机制。
 
 ## 编译器生成ast到render函数到vnode再到真实dom
+
+
+## this.$set
+`Vue.$set`先会检测数据类型，如果是基础数据类型，会提示不能设置，如果是数组，会直接添加或替换，如果是对象，这个key存在于对象中，直接替换value，key不存在与对象中，target为非响应式对象，直接给target设置值，target为响应式对象，进行依赖收集。
+
+## diff算法
+Vue 的 Diff 算法只会同层级比较。因为在大部分情况下，用户跨层级的移动操作特别少，可以忽略不计。
+1、逐层对比【因为同层元素移动比较常见】
+- 如果都是静态节点可以直接跳过。
+- 都是文本节点就直接替换内容（如果内容不相等）。
+- 如果只有新节点，就新增节点。只有只有老节点，就移除。
+- 如果新旧节点都有子节点，就继续比较子节点。循环新的节点，每一个节点都去老的同层节点里遍历，找到了就在进行子元素的比较，继续重复上述流程。如果没有找到，就生成新元素。
+
+2、算法优化【因为每次全部循环太浪费性能】
+- 静态节点可以直接跳过，例如内容里只有文本。因为不会产生变化。
+- 双端对比（快捷检索）
+ 在同级移动的情况下（移除、移动、修改某节点），大多数节点的前后节点都是不变的。所以可以假设同坐标的元素是不变的。
+ 所以可以进行4种双端比较：
+ - 新前和旧前（比如只是在列表后新增了元素，那么前面不变的就会在这里返回，直接复用）
+ - 新后和旧后（比如只是在列表前新增了元素，上一条没通过，就会一直尾元素比较，直接复用）
+ - 新后和旧前
+ - 新前和旧后
+- key优化
+ - 将没有通过快捷检索的所有旧元素节点，上的key放到数组oldIndexs中。（移动后指针开始和结尾中为处理的元素）
+ - 如果新的元素上面有key值，就去数组中oldIndexs查找。找到了就继续对比2个元素子节点。（记得移动位置）
+ - 如果新的元素上面没有key值，就去未出里旧元素中看是否相同的节点，有的话就返回索引index。
+ - 通过index，复用元素就继续对比2个元素子节点。（记得移动位置）
+
+ 3、删除多余元素
+新的数组和老的数组如果其中1个循环完，就退出循环。
+如果新的Vnode循环完oldStartIdx > oldEndIdx，那就移除oldVnode中未处理的节点。
+如果旧的Vnode循环完newStartIdx > newEndIdx，说明newVode还有剩余。创建新节点，插入Dom中。
+### 优点
+跨平台：Virtual DOM 是以 JavaScript 对象为基础而不依赖真实平台环境，所以使它具有了跨平台的能力，比如说浏览器平台、Weex、Node 等。
+提高DOM操作效率：把大量的DOM操作搬运到Javascript中，运用patching算法来计算出真正需要更新的节点，最大限度地减少DOM操作（开发者角度，开发者自己可能操作不当，写出低性能的代码），从而提高性能。
+提升渲染性能：在大量、频繁的数据更新下，依托diff算法，能够对视图进行合理、高效的更新。
