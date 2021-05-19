@@ -39,3 +39,32 @@
 - 并行化
   - 在请求通道上下功夫，解决请求阻塞问题，进而减少首屏时间，可借助http2.0来多路复用
 - 骨架屏减少用户焦虑等待
+
+## CSS3 硬件加速简介
+[参考链接](https://www.zhangxinxu.com/wordpress/2015/11/css3-will-change-improve-paint/)
+> 流程render tree -> 渲染元素 -> GPU渲染 -> 浏览器复合图层 -> 生成最终的屏幕画像
+每个图层会被加载到gpu中渲染，gpu渲染中不会触发重绘，这些transform的图层会有独立的合成器进行进行处理。
+- 哪些规则可以让浏览器主动创建图层呢
+- transform不为none
+- 透明属性opacity不为1
+- position不为ralative，且有z-index
+- 用于css过滤器元素filter
+- will-change: transform; // 创建新的渲染层，使用gpu加速渲染，可以使用元素的伪类hover，移入的时候触发，移除就remove
+
+## 性能优化
+### 页面是否能快速加载
+- 网络优化
+  - http2
+  - cdn
+- 代码大小
+  - 代码分隔
+  - 代码压缩
+  - tree-shaking
+- 首屏优化
+
+- 缓存
+  - 善用http缓存比如静态资源增加缓存public max-age
+### 图片优化
+- 图片压缩
+- 图片懒加载
+### 合理的交互loading

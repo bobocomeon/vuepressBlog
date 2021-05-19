@@ -61,3 +61,30 @@ class Countdown {
 }
 let c = new Countdown(2, () => console.log('DONE'));
 ```
+### 为什么通常在发送数据埋点请求的时候使用的是 1x1 像素的透明 gif 图片
+[参考](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/87)
+1. 跨域友好，天然支持
+2. gif体积最小
+3. 能完成整个http请求加响应
+4. 执行过程无阻塞，不会影响页面，只需要new Image，还可以通onload和onerror来检测状态
+5. 图片请求不占用ajax请求限额
+
+### 移动端1px解决方案
+- 使用伪元素
+``` css
+.setOnePx {
+  position: relative;
+  &:after {
+    position: absolute;
+    content: '';
+    background-color: #e5e5e5;
+    display: block;
+    width: 100%;
+    height: 1px;
+    transform: scale(1, 0.5);
+    top: 0;
+    left: 0;
+  }
+}
+```
+- 使用viewport 更具设备像素比dpr改变mete标签，页面缩放比例

@@ -34,9 +34,9 @@ module.exports = {
             ['prepare/', 'Introduction'],
             'prepare/jsbase',
             'prepare/summary',
-            'prepare/directory',
             'prepare/init',
-            'prepare/jsleetcode'
+            'prepare/jsleetcode',
+            'prepare/vue3'
           ]
         },
         {

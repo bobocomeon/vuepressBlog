@@ -89,3 +89,40 @@ flex属性是flex-grow，flex-shrink和flex-basis的缩写
     - auto 元素会根据自身的宽高来确定尺寸，但是会伸长并吸收容器中额外的自由空间，也会缩短自身来适应flex容器，这相当于将属性设置为`flex：1 1 auto`
     - initial 元素会根据自身的宽高来确定自身尺寸，但是会收缩自身已适应flex容器，但并不会伸长并吸收flex容器额外的空间，相当于设置了`flex： 0 1 auto`
 - `flex: 1` 就相当于设置了`flex: 1 1 auto`, 由于flex-shrink是1，默认不收缩， auto是按照内容宽度， flex-grow默认为0,不伸长，但是设置1就会根据剩余的对比，进行等比放大。
+
+
+### css选择器优先级
+内联 > id > 类、属性、伪类 > 标签元素、伪元素
+伪类： ：hover
+伪元素： ：after、：before
+
+### BFC
+可以理解为一个独立的容器，不会受外面的影响，常用来清除浮动，阻止margin重叠，防止元素被浮动元素覆盖
+常见形成BFC的方式有个
+float不为none
+overflow不会visible
+display为inline-block、table-cell、flex、
+position不为static或relative
+
+### 清除浮动的方法
+清除浮动可以理解为清除浮动产生的影响，当元素产生浮动时也是为当前元素创建的块格式化上下文，会对周围的元素或父元素产生影响，父元素无法自动计算高度而造成坍塌，和兄弟元素错位。
+1. 在父元素上添加一个伪元素
+```js
+.clearfix::after {
+  content: '\20';
+  clear: both;
+  display: block;
+  height: 0;
+  visibility: hidden;
+}
+```
+2. 使用bfc清除浮动
+子元素产生浮动，给父元素添加bfc，`overflow：hidden;`
+是因为根据bfc的规则，计算bfc的高度时，浮动元素也参与计算，因此清除浮动只需触发一个bfc就好。
+3. 父元素的最后一个子元素增加一个元素，设置clear：both；
+
+## 关于flexible
+[参考链接](https://github.com/amfe/article/issues/17)
+- 视觉稿是750px，分为100份，每一份单位是a，1a = 7.5px，1rem就等于10a，即1rem = 75px;
+- 比如iphone6的宽度和高度时`375 X 667` dpr是2 换算成物理像素 750 x 1334
+drp = 设备物理像素 / 设备独立像素(就是手机宽度px)
