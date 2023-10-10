@@ -23,6 +23,7 @@ module.exports = {
       {text: '前端基础', link: '/accumulate/prepare/'},
       {text: '算法题库', link: '/algorithm/'},
       {text: '网络', link: '/network/guide/'},
+      {text: '前端的进击', link: '/front-end-playground'},
       {text: '其他', link: '/others/'},
     ],
     sidebar: {
@@ -57,6 +58,16 @@ module.exports = {
             'compile/entrance'
           ]
         }
+      ],
+      '/front-end-playground': [
+        {
+          title: '性能优化',
+          collapsable: false,
+          children: [
+            ['performance/', 'Introduction'],
+            'performance/optimize',
+          ]
+        },
       ],
       '/algorithm/': [
         {

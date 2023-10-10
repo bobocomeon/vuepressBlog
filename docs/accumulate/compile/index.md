@@ -1,4 +1,13 @@
 # vue相关
+### 初始化前，beforeCreate做了写啥
+- 合并options配置
+  - 初始化`new Vue`
+  - 子组件初始化，确认组件的父子关系和初始化某些实例属性
+  - 将父组件的自定义事件传递给子组件
+  - 提供将render函数转为vnode的方法
+  - 执行组件的beforeCreate钩子函数
+  - 并且在当前生命周期，是不能访问this中data定义的变量，这个时候data中的变量，还没挂载到this上
+  - 但是插件内部的install方法是通过Vue.use方法，一般选择在beforeCreate这个钩子内执行
 ### computed被收集的过程
 - 响应式数据被读取到了会触发getter，收集当前的watcher到依赖中，如果模板中用到了，就会读取渲染watcher，在计算属性里用到了就会读取渲染wathcer，只要值发生变化了就会通知计算属性重新计算并进行值返回，最后渲染。
 - computed 属性为什么能够在依赖改变的时候，自己发生变化？
