@@ -41,3 +41,6 @@ vue响应式原理
 vue路由
 vuex
 事件循环原理
+### script中的defer和async有什么区别
+![](/images/async.png)
+- 在正常的加载中，加载html解析的时候，遇到script标签，会立刻执行，把执行权交给js线程，然后执行完了在交给渲染线程

@@ -23,7 +23,8 @@ module.exports = {
       {text: '前端基础', link: '/accumulate/prepare/'},
       {text: '算法题库', link: '/algorithm/'},
       {text: '网络', link: '/network/guide/'},
-      {text: '前端的进击', link: '/front-end-playground'},
+      {text: '小程序', link: '/miniprogram/'},
+      {text: '前端的进击', link: '/front-end-playground/'},
       {text: '其他', link: '/others/'},
     ],
     sidebar: {
@@ -59,31 +60,46 @@ module.exports = {
           ]
         }
       ],
-      '/front-end-playground': [
+      '/front-end-playground/': [
         {
-          title: '性能优化',
+          title: '前端进阶',
           collapsable: false,
           children: [
-            ['performance/', 'Introduction'],
+            // ['performance/', 'Introduction'],
             'performance/optimize',
+            'exception',
+            'react',
+          ]
+        },
+      ],
+      '/miniprogram/': [
+        {
+          title: '小程序学习',
+          collapsable: false,
+          children: [
+            // ['performance/', 'Introduction'],
+            'wechat',
+            'tora',
           ]
         },
       ],
       '/algorithm/': [
         {
-          title: '算法篇',
+          title: '必刷算法',
           collapsable: false,
           children: [
-            'leetcode'
+            'leetcode',
+            'array',
+            'string'
           ]
         }
       ],
       '/network/': [
         {
-          title: '网络篇',
+          title: '计算机网络',
           collapsable: false,
           children: [
-            ['guide/', 'Introduction'],
+            ['guide/', 'http'],
             'guide/performance',
             'guide/https',
             'guide/tcp'
