@@ -286,6 +286,16 @@ function wrapInArray<T>(value: T): T[] {
 
 const unknownBox = wrapInArray<unknown>("a mysterious string");
 ```
+#### 深度 Readonly
+> 递归调用 / 函数判断
+```ts
+// 需要用到递归调用，先判断如果是函数，就直接返回
+type DeepReadonly<T> = {
+  readonly [K in keyof T]:
+    T[K] extends Function ? T[K] : 
+      T[K] extends Object ? DeepReadonly<T[K]> : T[K]
+}
+```
 ### `If` 类型
 >它接收一个条件类型 `C` ，一个判断为真时的返回类型 `T` ，以及一个判断为假时的返回类型 `F`。 `C` 只能是 `true` 或者 `false`， `T` 和 `F` 可以是任意类型。
 ```ts
@@ -306,4 +316,30 @@ type error = If<null, 'a', 'b'>
 对于 `true / false，甚至 1 / 2 / null / undefined / 'hello'` 这些基本类型的变量，可以直接使用 `extends` 判断
 ```ts
 type If<c extends boolean, T, F> = C extends true ? T : F;
+```
+### `in / keyof / infer` 应用
+#### 实现 Omit
+我们知道怎么去实现`Exclude`
+```ts
+type MyExclude<T, U> = T extends U ? never : T; // 上面也有具体描述
+```
+`type MyOmit<T, K>` 目标是得到 T 所有字段减去 K 中字段的结果
+```ts
+// 实现 MyOmit
+type MyOmit<T, K> = any
+interface Todo {
+  title: string
+  description: string
+  completed: boolean
+}
+// TodoPreview: { completed: boolean }
+type TodoPreview = MyOmit<
+  Todo,
+  'description' | 'title'
+>
+// 实现, 通过 extends keyof T 来约束 K
+type MyOmit<T, K extends keyof T> = {
+  [p in Exclude<keyof T, k>]: T[P]
+}
+
 ```

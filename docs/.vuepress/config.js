@@ -53,7 +53,7 @@ module.exports = {
           title: '编译',
           collapsable: false,
           children: [
-            ['compile/', 'Introduction'],
+            ['compile/', 'vue2源码'],
             'compile/vdom',
             'compile/parse',
             'compile/entrance'

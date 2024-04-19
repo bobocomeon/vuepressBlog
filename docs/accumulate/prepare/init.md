@@ -86,38 +86,38 @@ initRender(vm)
 
 
 ## 揭开数据响应式系统的面纱
-从initData开始，initData函数最后会执行observe(data, true)
-observe会判断是否拥有__ob__属性，因为是第一次初始化，所以肯定是没有的，因此会执行new Observer
-new Observer一个实例时会在内部也new一个dep实例，并且添加__ob__属性，再对数组的元素和对象的属性添加数据劫持(defineReactive)
-当挂载时，也就是执行vue.$mount这个函数时，会执行mountComponet
-mountComponet会声明updateComponet并将updateComponet作为第二个参数去执行new Watcher
-new Wathcer构造函数内部会声明一系列属性，最后会执行watcher.get方法
-执行watcher.get方法,会触发pustTarget
-pustTarget给Dep.target赋值为当前Wathcer实例然后调用watcher.getter
-watcher.getter(updateComponent内部有_update和_render函数)，_render函数会对属性求值，也就触发了属性的get操作
-属性的get操作会判断Dep.target是否存在
-此时Dep.target是存在的，然后执行dep.depend
-dep.depend执行Wathcer.addDep
-Wathcer.addDep内部进行了避免重复收集依赖的操作，并且收集依赖
-执行完addDep后，此次依赖收集就完成了
-数据发生更改，触发setter
-set会执行dep.notify
-dep.notify会去遍历dep.subs观察者数组，遍历执行watcher.update方法
-watcher.update执行了queueWatcher
-queueWatcher执行了nextTick(flushSchedulerQueue)
-nextTick(flushSchedulerQueue)先把flushSchedulerQueue添加进callbacks回调函数数组
-其次nextTick执行timerFunc
-timerFunc是异步的(通过Promise,MutationObserver,setImmediate,setTimeout这四种异步方法)执行flushCallbacks
-flushCallbacks是异步执行callbacks中所有回调函数，也就是异步执行添加进去的flushSchedulerQueue
-flushSchedulerQueue会获取时间戳，对id进行排序，最主要是遍历执行watcher.run方法
-atcher.run执行watcher.getter
-watcher.getter也就是执行updateComponent
-updateComponent将虚拟DOM转换成真实DOM，这里就完成了数据更改后的重新渲染
-之后返回flushSchedulerQueue中，继续执行后续函数
-先resetSchedulerState重置状态
-callActivatedHooks调用组件更新并激活钩子函数
-callUpdatedHooks触发updated生命周期钩子函数
-至此！一个响应式从头到尾正式完成！
+- 从initData开始，initData函数最后会执行observe(data, true)
+- observe会判断是否拥有__ob__属性，因为是第一次初始化，所以肯定是没有的，因此会执行new Observer
+- new Observer一个实例时会在内部也new一个dep实例，并且添加__ob__属性，再对数组的元素和对象的属性添加数据劫持(defineReactive)
+- 当挂载时，也就是执行vue.$mount这个函数时，会执行mountComponet
+- mountComponet会声明updateComponet并将updateComponet作为第二个参数去执行new Watcher
+- new Wathcer构造函数内部会声明一系列属性，最后会执行watcher.get方法
+- 执行watcher.get方法,会触发pustTarget
+- pustTarget给Dep.target赋值为当前Wathcer实例然后调用watcher.getter
+- watcher.getter(updateComponent内部有_update和_render函数)，_render函数会对属性求值，也就触发了属性的get操作
+- 属性的get操作会判断Dep.target是否存在
+- 此时Dep.target是存在的，然后执行dep.depend
+- dep.depend执行Wathcer.addDep
+- Wathcer.addDep内部进行了避免重复收集依赖的操作，并且收集依赖
+- 执行完addDep后，此次依赖收集就完成了
+- 数据发生更改，触发setter
+- set会执行dep.notify
+- dep.notify会去遍历dep.subs观察者数组，遍历执行watcher.update方法
+- watcher.update执行了queueWatcher
+- queueWatcher执行了nextTick(flushSchedulerQueue)
+- nextTick(flushSchedulerQueue)先把flushSchedulerQueue添加进callbacks回调函数数组
+- 其次nextTick执行timerFunc
+- timerFunc是异步的(通过Promise,MutationObserver,setImmediate,setTimeout这四种异步方法)执行flushCallbacks
+- flushCallbacks是异步执行callbacks中所有回调函数，也就是异步执行添加进去的flushSchedulerQueue
+- flushSchedulerQueue会获取时间戳，对id进行排序，最主要是遍历执行watcher.run方法
+- atcher.run执行watcher.getter
+- watcher.getter也就是执行updateComponent
+- updateComponent将虚拟DOM转换成真实DOM，这里就完成了数据更改后的重新渲染
+- 之后返回flushSchedulerQueue中，继续执行后续函数
+- 先resetSchedulerState重置状态
+- callActivatedHooks调用组件更新并激活钩子函数
+- callUpdatedHooks触发updated生命周期钩子函数
+- 至此！一个响应式从头到尾正式完成！
 
 
 ## computed实现和缓存机制
