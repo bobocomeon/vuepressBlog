@@ -1,4 +1,4 @@
-# Typescript
+# ts基础知识点理解
 
 ## type和interface区别
 ### 相同点
