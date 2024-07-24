@@ -107,3 +107,45 @@ methods:{
   }
 }
 ```
+
+### render-watcher、conputed-watcher、user-watcher区别和原理
+#### render-watcher
+- render-watcher是vue开发中最重要的实例了，data中属性的更新就会触发视图的更新，在初始化过程中，object.defineproperty会进行依赖收集,收集到的就是render-watcher，添加到这个属性的依赖列表（Dep）实例中。
+- Setter派发更新时，那就是执行render-watcher的回调，Dep实例就会就会通知，然后就会执行这个属性的Watcher实例上的update方法，这个run方法会重新生成执行render-function，如果patch diff更新视图。
+
+#### user-watcher
+- 是通过watch或者&watch显示创建的Watcher，这类watch允许开发者自定义响应式数据的变化，开发者可以指定某个响应式数据作为监听目标，并提供一个回调函数，当监听数据变化时，回调函数也会执行。
+- 常用于通过监听数据变化执行异步操作，或者根据数据变化进行逻辑判断等任务
+#### conputed-watcher
+- 依赖追踪
+  - 当定义一个computed属性时，会创建一个Computed Watcher，这个Watcher会在初次访问计算属性时，执行其定义的函数，同时自动追踪函数中所依赖的所有响应式属性。
+  - 依赖收集： 在computed对象初始化期间，任何被访问的响应式数据都会将computed watcher收集他们各自的依赖列表（Dep实例），一旦依赖数据发生变更，Computed Watcher就会被通知;
+- 缓存
+  - computed具有缓存机制，当计算属性经过计算后，内部的标志位会表明已经计算过了，Computed-watcher会缓存计算结果，只有依赖的数据发生变化会重新计算，因为内部的响应式数据会收集computed-watcher，变更后通知计算属性基性计算，也会通知页面重新渲染，渲染时会重新读取重新计算后的值
+
+#### 举例
+```js
+data() {
+  return {
+    a: 1,
+    b: 2
+  };
+},
+computed: {
+  sum() {
+    return this.a + this.b;
+  }
+}
+```
+- 初始化: 当组件被创建时，vue在进行响应式收集的时候，会分别为a和b创建一个Dep实例，同时对于计算属性sum，vue会创建一个特殊的Watcvher（computed watcher）
+- 依赖收集：
+  -  当 sum 第一次被访问时，它的 Computed Watcher 被激活。
+  -  Computed Watcher 开始执行 sum 的定义函数（return this.a + this.b;）。
+  -  当访问 a 和 b 时，它们各自的 getter 函数被调用。在 getter 中，Vue 检测到当前有一个活跃的 Watcher（sum 的 Computed Watcher）。
+  -  a 和 b 的 Dep 将这个 Watcher 添加到它们的依赖列表中。
+  -  同时，Watcher 记录它依赖于 a 和 b 的 Dep。（这个是避免重复收集，管理和优化依赖关系，当某个数据项不再使用，watcher可据此清除掉这个数据的依赖关系，减少不必要的计算和监听，精确的更新机制，只有真正依赖的这些数据的Watcher会被通知更新）
+-  响应更新：
+   -  假设 a 的值从 1 变为 3。a 的 setter 被调用，它通知 a 的 Dep。
+   -  a 的 Dep 遍历它的依赖列表（包含 sum 的 Watcher），并通知这些 Watcher 数据已变化。
+   -  sum 的 Watcher 收到通知后，标记自己为 "dirty"，表示计算属性的结果可能已经变化，需要重新计算。
+   -  下次 sum 被访问时，它的 Watcher 会重新计算 sum 的值。

@@ -127,6 +127,17 @@ module.exports = {
             'safety'
           ]
         }
+      ],
+      '/typescript/': [
+        {
+          title: 'typescript知识点',
+          collapsable: false,
+          children: [
+            '/',
+            'typescript',
+            'question'
+          ]
+        }
       ]
     },
     sidebarDepth: 2, // 侧边栏显示2级
