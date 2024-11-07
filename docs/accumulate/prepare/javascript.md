@@ -354,6 +354,30 @@ Promise.resolve().then(() => {
 // 第一拍，promise需要由pending变为fulfilled
 // 第二拍，then函数挂载到微任务队列  
 ```
+任何标记为 async 的函数在 JavaScript 中都会返回一个 Promise
+1. 返回值行为：
+```js
+// 如果 async 函数内部有返回值（例如 return 42;），
+// 这个返回值会被自动包装成一个 fulfilled 的 Promise。例如，
+async function foo() { return 42; } 
+// 会返回一个解析值为 42 的 Promise。
+example1().then(value => console.log("example1:", value));  // 输出 "example1: 42"
+
+```
+2. 异常处理：
+```js
+// 如果 async 函数内部抛出一个错误（例如 throw new Error("Oops")），
+// 这个错误会导致返回的 Promise 被拒绝（rejected），并以该错误为拒绝理由。
+example2().catch(error => console.log("example2:", error)); // 输出 "example2: Error: Oops"
+example3().then(value => console.log("example3:", value));  // 输出 "example3: undefined"
+
+```
+3. 没有显式返回
+```js
+// 如果 async 函数没有显式返回任何值（即没有 return 语句）
+// 它仍然会返回一个 fulfilled 的 Promise，解析值为 undefined。
+```
+
 ### promise扩展函数的实现
 
 ## 实现一个ajax

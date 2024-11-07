@@ -64,18 +64,18 @@ x
     ```
 
 - 接口（Interface）
-1. 需要扩展性或继承，可通过extends关键字来实现继承以及多重继承，维护一个层次结构的类型系统变得简单和直观
-2. 类实现：类可直接通过`implements`来实现接口
-3. 能能好的用来定义对象接口，在定义公共Api或类库的APi非常有用。
+  - 需要扩展性或继承，可通过extends关键字来实现继承以及多重继承，维护一个层次结构的类型系统变得简单和直观
+  - 类实现：类可直接通过`implements`来实现接口
+  - 能能好的用来定义对象接口，在定义公共Api或类库的APi非常有用。
 
 - 类型别名（type）
-1. 类型别名特别适合组合已存在的类型，如联合类型、交叉类型、元祖等
-2. 类型别名可以和映射类型、条件类型一起使用，类型别名是唯一的选择，可创建动态和条件组合成新的类型。
-    ```ts
-    type ReadOnly<T> = {readonly [P in keyof T]: T[P]}
-    type Partial<T> = {[P in keyof T]?: T[P]}
-    type IsNumber<T> = { T extends number : true : false}
-    ``` 
+  - 类型别名特别适合组合已存在的类型，如联合类型、交叉类型、元祖等
+  - 类型别名可以和映射类型、条件类型一起使用，类型别名是唯一的选择，可创建动态和条件组合成新的类型。
+      ```ts
+      type ReadOnly<T> = {readonly [P in keyof T]: T[P]}
+      type Partial<T> = {[P in keyof T]?: T[P]}
+      type IsNumber<T> = { T extends number : true : false}
+      ``` 
 
 ## TypeScript 中的 this 和 JavaScript 中的 this 有什么差异
 
@@ -127,7 +127,7 @@ x
 ## TypeScript 中如何联合枚举类型的 Key?
 
 1. keyof typeof获取枚举键的集合，给我枚举中所有成员的名称，作为一个联合类型
-2. 直接使用`keyof tyoeof enum ｜ keyof tyoeof enum`联合
+2. 直接使用`keyof typeof enum ｜ keyof typeof enum`联合
 
 
 ## TypeScript 中 ?.、??、!.、_、** 等符号的含义？
